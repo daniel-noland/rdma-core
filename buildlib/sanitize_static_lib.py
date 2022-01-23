@@ -31,6 +31,7 @@ import itertools
 import sys
 import os
 import re
+import shutil
 
 SymVer = collections.namedtuple(
     "SymVer", ["version", "prior_version", "globals", "locals"])
@@ -169,12 +170,18 @@ class Lib(object):
     def rename_syms(self, rename_fn):
         """Invoke objcopy on all the objects to rename their symbols"""
         for I in self.objects:
-            subprocess.check_call([
-                args.objcopy,
-                "--redefine-syms=%s" % (rename_fn),
-                os.path.join(self.objdir, I),
-                os.path.join(self.final_objdir, I)
-            ])
+            try:
+                subprocess.check_call([
+                    args.objcopy,
+                    "--redefine-syms=%s" % (rename_fn),
+                    os.path.join(self.objdir, I),
+                    os.path.join(self.final_objdir, I)
+                ])
+            except subprocess.CalledProcessError:
+                shutil.copyfile(
+                    str(os.path.join(self.objdir, I)),
+                    str(os.path.join(self.final_objdir, I))
+                )
 
     def incorporate_internal(self, internal_libs):
         """If this library requires an internal library then we want to inline it into

@@ -298,17 +298,20 @@ COMPAT_SYMVER_FUNC(ibv_get_device_guid, 1_0, "IBVERBS_1.0",
 	return ibv_get_device_guid(device->real_device);
 }
 
+__attribute__((lto_visibility_public))
 static int poll_cq_wrapper_1_0(struct ibv_cq_1_0 *cq, int num_entries,
 			       struct ibv_wc *wc)
 {
 	return cq->context->real_context->ops.poll_cq(cq->real_cq, num_entries, wc);
 }
 
+__attribute__((lto_visibility_public))
 static int req_notify_cq_wrapper_1_0(struct ibv_cq_1_0 *cq, int sol_only)
 {
 	return cq->context->real_context->ops.req_notify_cq(cq->real_cq, sol_only);
 }
 
+__attribute__((lto_visibility_public))
 static int post_srq_recv_wrapper_1_0(struct ibv_srq_1_0 *srq, struct ibv_recv_wr_1_0 *wr,
 				 struct ibv_recv_wr_1_0 **bad_wr)
 {
@@ -346,6 +349,7 @@ static int post_srq_recv_wrapper_1_0(struct ibv_srq_1_0 *srq, struct ibv_recv_wr
 	return ret;
 }
 
+__attribute__((lto_visibility_public))
 static int post_send_wrapper_1_0(struct ibv_qp_1_0 *qp, struct ibv_send_wr_1_0 *wr,
 				 struct ibv_send_wr_1_0 **bad_wr)
 {
@@ -427,6 +431,7 @@ static int post_send_wrapper_1_0(struct ibv_qp_1_0 *qp, struct ibv_send_wr_1_0 *
 	return ret;
 }
 
+__attribute__((lto_visibility_public))
 static int post_recv_wrapper_1_0(struct ibv_qp_1_0 *qp, struct ibv_recv_wr_1_0 *wr,
 				 struct ibv_recv_wr_1_0 **bad_wr)
 {
